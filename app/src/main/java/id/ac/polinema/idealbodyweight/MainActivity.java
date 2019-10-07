@@ -10,17 +10,18 @@ import android.view.MenuItem;
 import id.ac.polinema.idealbodyweight.fragments.AboutFragment;
 import id.ac.polinema.idealbodyweight.fragments.BrocaIndexFragment;
 import id.ac.polinema.idealbodyweight.fragments.MenuFragment;
+import id.ac.polinema.idealbodyweight.fragments.ResultFragment;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, BrocaIndexFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, BrocaIndexFragment.OnFragmentInteractionListener, ResultFragment.OnFragmentInteractionListener{
 
 	// Deklarasikan atribut Fragment di sini
 	private AboutFragment aboutFragment;
 	private MenuFragment menuFragment;
     private BrocaIndexFragment brocaIndexFragment;
+	private ResultFragment resultFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-        brocaIndexFragment = new BrocaIndexFragment();
 		menuFragment = new MenuFragment();
 		aboutFragment = AboutFragment.newInstance("Indah Wahyuningtyas");
 		super.onCreate(savedInstanceState);
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.fragment_container, menuFragment)
 				.commit();
+		brocaIndexFragment = new BrocaIndexFragment();
+		resultFragment = new ResultFragment();
 	}
 
 	@Override
@@ -61,7 +64,17 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
 	}
 
     @Override
-    public void onCalculateBrocaIndexClicked(float index) {
+	public void onCalculateBrocaIndexClicked(float index) {
+		resultFragment.setInformation(String.format("Your ideal weight is %.2f kg", index));
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.fragment_container, resultFragment)
+				.commit();
+	}
 
-    }
+	@Override
+	public void onTryAgainButtonClicked(String tag) {
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.fragment_container, brocaIndexFragment)
+				.commit();
+	}
 }
